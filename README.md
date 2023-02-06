@@ -75,14 +75,15 @@ Pre-requisites:
  
 4. Add the following line to the ***arduino_secrets.h** file to desitnate the certificate:
 	
-	```
-	const char SECRET_CERTIFICATE[] = R"(
+```
+const char SECRET_CERTIFICATE[] = R"(
 -----BEGIN CERTIFICATE-----
 ...
 -----END CERTIFICATE-----
 )";
-	```
-	Replace the entire section from ***BEGIN CERTIFICATE*** to ***END CERTIFICATE*** with the contents from the file you downloaded and renamed to ***certificate.pem.crt***.
+```
+
+Replace the entire section from ***BEGIN CERTIFICATE*** to ***END CERTIFICATE*** with the contents from the file you downloaded and renamed to ***certificate.pem.crt***.
 	
 ## Deploy your code to the MKR 1010
 1. Open up the Arduino IDE you had previously installed. 
