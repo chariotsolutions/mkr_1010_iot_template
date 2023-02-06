@@ -68,8 +68,8 @@ Pre-requisites:
 
 	```
 	#define SECRET_BROKER "your-broker-here"
-
 	```
+	
 	Your AWS IoT broker can be found by navigating to	***AWS IoT/MQTT***. This will bring you to the broker details form. From here you can copy the value displayed under ***Endpoint*** and paste it in as the value for ***SECRET_BROKER***.
 	
  
