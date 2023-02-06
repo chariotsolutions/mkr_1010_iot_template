@@ -1,3 +1,14 @@
-/secret
 
-**/arduino_secrets.h
+# Intellij excludes
+
+**/.idea
+
+# Secrets exclude
+**/secret
+
+
+# Terraform excludes
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+**/.terraform.lock.hcl

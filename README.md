@@ -1,9 +1,9 @@
 # IoT Connectivity Bootstrap
 
-The purpose of this project is to provide a simple way of getting started quickly with connecting a MKR 1010 WIFI device with the Environment Shield  to AWS Core IoT, read telemetry for the envioronemnt,  persist and store data. 
+The purpose of this project is to provide a simple way of getting started quickly with connecting a MKR 1010 WIFI device with the Environment Shield to AWS Core IoT, read telemetry for the envioronemnt,  persist and store data. 
 
 
-# Required Hardware. 
+## Required Hardware 
 * [Arduino MKR 1010 WIFI](https://store-usa.arduino.cc/products/arduino-mkr-wifi-1010)
 * [Arduino MKR ENV Shield](https://store-usa.arduino.cc/products/arduino-mkr-env-shield-rev2)
 
@@ -13,37 +13,92 @@ The purpose of this project is to provide a simple way of getting started quickl
 2. Connect the USB cable to the MKR Wifi to power it. 
 3. Download and install the drivers for the board. If you are using a Mac or Linux get the drivers from [here](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers). If you are on a Windows platform, download the drivers from [here](here).
 
-# Configure an AWS Account
-An AWS account will be needed to setup this bootstrap project. If you don't have one, you can start with the Free Tier account by signing up for a new account [here](https://aws.amazon.com/free). 
-
-1. Click on the ***Create a Free Account*** button. This will bring you to the ***Acount Signup form***.
-![Diagram](./images/account_creation.png)
-2. Enter an email for the ***Root user email address*** and a name for the account ***AWS Account Name***.
-3. Click on the ***Verify email address*** button. This will bring you to the account verification form.
-![Diagram](./images/account_verification.png)	
-4. You should have recieved a temporary code in your email. Enter the code from your email in this verification form and click on the ***Verify*** button. This will take you to the ***Account Password*** form.
-![Diagram](./images/account_password.png). Enter the password for the ***Root user password*** and ***Confirm Root User Password*** and click on the ***Continue*** button. This will bring you to the ***Contact Information*** form. 
-5. Fill out your contact information and click on the ***Continue*** button. This will bring you to the billing information form. Your credit card informtion will be required to continue. You will not be charged so long ass you stay within the free tier confines. See [this](https://aws.amazon.com/free/free-tier-faqs/) for additional information and details on the free tier. Some screen shots will be omitted for brevity but filling them in should be fairly intuitive. 
-6. Click on the ***Verify** button to continue. This will bring you to the ***Confirm your identity*** form. 
-7. Fill in the required detils and click on the ***Send SMS*** button to continue. This will send you an SMS message or a phone call dependening on how you filled out the form. 
-7. When you recieve the phone call or SMS message, enter the value in the ***Confirm your identity*** form and click on the ***Continue*** button to continue. 
-8. This will bring you the the ***Support Plan*** configuration. 
-![Diagram](./images/support_plan.png)
-9. Select the ***Basic Support - free*** option as that is all we will need for now. This should complete your account creation. Click on the 
-10. Click on the ***Go to the AWS Management Console*** button or go to [this](https://aws.amazon.com/) link and click on ***Sign In to the Console button*** to log in to your new account. 
-11. This should bring you to the ***Sign On** form. 
-![Diagram](./images/sign_on.png)
-12. Click on the radio button for ***Root User*** and fill in the email address you used to create the account for ***Root user email address*** then click the ***Next*** button. 
-13. This will bring you to the ***Password*** form. Enter in the password you set when creating the account and click on the ***Sign In** button. 
-14. This should bring you to your dashboard. Bookmark this link. You'll need it in the future. 
-
-
-## Setup your Arduino development environment and connect your device to AWS Core IoT
+		
+## Setup your Arduino development environment and generate a Certificate Signing Request for your device
 
 1. Follow the directions in [this](https://docs.arduino.cc/tutorials/mkr-wifi-1010/securely-connecting-an-arduino-mkr-wifi-1010-to-aws-iot-core) tutorial to setup the development environment, register your device with AWS Core IoT and test the connectivity of the device. 
 
-	**Note:**  This tutorial includes a block of code referred to as a ***Sketch***. We will later be altering this with custom code to read telemetry from the MKR ENV Shield. In addition to this, AWS is constantly changing their UI so you may have to navigate around to find some options. 
-	
+***Notes:*** 
+
+* Follow the directions up to and including the point in the ***Configuring and Adding the Board to AWS IoT Core*** where it asks you to download the generated Certificate Signning Request. For the actual registration of the device in AWS Core IoT, follow the directions outlined in ***Register the device using Terraform*** section below. 
+* Copy the contentents of the Certificate Signing Request into a file named ***cert.csr** and place it in the ***/mkr_1010_env/secret/cert.csr*** directory. 
 	
 
+## Register the device using Terraform
 
+Pre-requisites:
+	* [Create an AWS Account and Install the AWS Client](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
+	* [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+	* [Create a profile for Terraform to Use](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html****)
+	* Apply the following permissions to your user by following the directions here for [Adding permissions by attaching policies directly to the user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_change-permissions.html):
+		* AWSCertificateManagerFullAccess
+		* AWSIoTThingsRegistration
+		* AWSIoTFullAccess
+ 	
+
+1. Follow the directions for [setting up Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build) on your machine. ***Note:** We will be using named profiles for this rather than environment variables so follow the directions for [configuring named profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiFrles.html) to configure a profiel.  
+
+2. Edit the main.tf located in the ***/Terraform*** directory. 
+	* Change the region in the ***provider** section to the region you wish to use
+	* Change the profile in the ***provider** section to the profile you created in step 1 above.
+	* From the command line in the ***/Terraform directory*** execute the following command
+		```
+		terraform init
+		terraform apply
+		```
+	This will generate a Core IoT device and a certificate that can be used to connect to the MQTT broker. 
+	
+3. Download the generated certificate by doing the following:
+	1. Navigate to to ***AWS IoT / Manage / Things*** and select the thing named ***MKR_1010_ENV_THING*** This will bring you to the ***Thing Details*** form.
+	2. Select the ***Certificates*** tab and click on the link for the ***Certificate ID***.
+	3. This will bring you to the ***Details*** form. 
+	4. Click on the butten labelled ***Actions*** in the upper right-hand corner and select ***Download***. Rename the file to ***certificate.pem.crt and move the file to the ***/mkr_1010_env/secret*** directory. You will later add the conntents of this to the ***arduino_secrets.h*** file. 
+
+## Configure your Arduino Secrets
+1.	Create a file named ***arduino_secrets.h** in the ***/mkr_1010_env/secret*** directory
+2. Add the following two lines to that file for connecting to your WiFi and provide the 	appropriate values:
+
+	```
+	#define SECRET_SSID "your-ssid-here"
+	#define SECRET_PASS "your-password-here"
+	
+	```
+
+3. Add the following line to the ***arduino_secrets.h** file to designate your AWS IoT Broker:
+
+	```
+	#define SECRET_BROKER "your-broker-here"
+
+	```
+	Your AWS IoT broker can be found by navigating to	***AWS IoT/MQTT***. This will bring you to the broker details form. From here you can copy the value displayed under ***Endpoint*** and paste it in as the value for ***SECRET_BROKER***.
+	
+ 
+4. Add the following line to the ***arduino_secrets.h** file to desitnate the certificate:
+	
+	```
+	const char SECRET_CERTIFICATE[] = R"(
+-----BEGIN CERTIFICATE-----
+...
+-----END CERTIFICATE-----
+)";
+	```
+	Replace the entire section from ***BEGIN CERTIFICATE*** to ***END CERTIFICATE*** with the contents from the file you downloaded and renamed to ***certificate.pem.crt***.
+	
+## Deploy your code to the MKR 1010
+1. Open up the Arduino IDE you had previously installed. 
+2. Open the file named ***mkr_1010_env.ino*** in teh ***mkr_1010_env*** directory.
+3. The port and device should already have been configured in the steps above to set up the IDE. You should now be able to select ***Sketch/Upload** from the menu. This step will perform a compile and subseqent upload to the device. 
+4. Open up the ***Serial Monitor** by selecting ***Tools/Serial Monitor*** from the menu. 
+5. On the right hand side 	of the serial monitor pane, make sure it is configured for ***Both NL & CR** and ***9600 baud***. You should now begin to see status messages when the device attempts a connection and when it posts the telemetry. The telemetry message will look similar to the following in the serial monitor:
+
+```
+{
+  "temperature": 77.1,
+  "humidity": 36.047,
+  "pressure": 1002.636,
+  "illuminance": 18.065
+}
+```
+6. You can no go into the AWS portal and verify that it is recieving the telemetry. From the portal, navigate to ***AWS IoT / MQTT test client***. Click on the ***Subscribe To Topic*** tab and set the ***Topic filter*** value to be ***environment/#***.
+ 
+	
