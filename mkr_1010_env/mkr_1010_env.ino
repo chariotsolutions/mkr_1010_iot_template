@@ -19,7 +19,6 @@
 #include <ArduinoMqttClient.h>
 #include <WiFiNINA.h> // change to #include <WiFi101.h> for MKR1000
 #include <Arduino_MKRENV.h>
-
 #include "./secret/arduino_secrets.h"
 
 /////// Enter your sensitive data in arduino_secrets.h
@@ -60,16 +59,6 @@ void setup() {
   // and the accompanying public certificate for it
   sslClient.setEccSlot(0, certificate);
 
-  // Optional, set the client id used for MQTT,
-  // each device that is connected to the broker
-  // must have a unique client id. The MQTTClient will generate
-  // a client id for you based on the millis() value if not set
-  //
-  // mqttClient.setId("clientId");
-
-  // Set the message callback, this function is
-  // called when the MQTTClient receives a message
-  mqttClient.onMessage(onMessageReceived);
 }
 
 void publishTelemetry() {
@@ -117,8 +106,6 @@ void loop() {
   if (millis() - lastMillis > 5000) {
     lastMillis = millis();
 
-    publishMessage();
-
     publishTelemetry();
   }
 }
@@ -138,51 +125,24 @@ void connectWiFi() {
     Serial.print(".");
     delay(5000);
   }
-  Serial.println();
-
-  Serial.println("You're connected to the network");
-  Serial.println();
+  Serial.println("\nYou're connected to the network\n");
+  
 }
 
 void connectMQTT() {
-  Serial.print("Attempting to MQTT broker: ");
+  Serial.print("Attempting to connect to MQTT broker: ");
   Serial.print(broker);
-  Serial.println(" ");
+  Serial.println();
 
   while (!mqttClient.connect(broker, 8883)) {
-    // failed, retry
+    // failed, retrying
     Serial.print(".");
-    int res = mqttClient.connect(broker, 8883);
-    Serial.print(res);
     delay(1000);
   }
 
-  Serial.println("You're connected to the MQTT broker");
+  Serial.println("\nYou're connected to the MQTT broker");
 
   // subscribe to a topic
   mqttClient.subscribe(subscribe_topic);
 }
 
-void publishMessage() {
-  Serial.println("Publishing message");
-
-  // send message, the Print interface can be used to set the message contents
-  mqttClient.beginMessage("arduino/outgoing");
-  mqttClient.print("hello ");
-  mqttClient.print(millis());
-  mqttClient.endMessage();
-}
-
-void onMessageReceived(int messageSize) {
-  // we received a message, print out the topic and contents
-  Serial.print("Received a message with topic '");
-  Serial.print(mqttClient.messageTopic());
-  Serial.print("', length ");
-  Serial.print(messageSize);
-  Serial.println(" bytes:");
-
-  // use the Stream interface to print the contents
-  while (mqttClient.available()) {
-    Serial.print((char)mqttClient.read());
-  }
-}
