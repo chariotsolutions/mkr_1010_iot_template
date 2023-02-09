@@ -124,6 +124,8 @@ resource "aws_s3_bucket" "telemetry_bucket" {
   bucket = "${replace(var.project_name, "_","-")}-telemetry-bucket"
 
   tags = local.tags
+
+  force_destroy = true
 }
 
 # Applies an acl to the S3 Bucket
@@ -136,6 +138,7 @@ resource "aws_s3_bucket_acl" "telemetry_bucket_acl" {
 resource "aws_kinesis_stream" "telemetry_stream" {
   name             = "${var.project_name}_telemetry_stream"
   retention_period = 24
+  shard_count      = 1
 
   shard_level_metrics = [
     "IncomingBytes",
@@ -143,7 +146,7 @@ resource "aws_kinesis_stream" "telemetry_stream" {
   ]
 
   stream_mode_details {
-    stream_mode = "ON_DEMAND"
+    stream_mode = "PROVISIONED"
   }
 
   tags = local.tags
@@ -157,7 +160,7 @@ resource "aws_kinesis_firehose_delivery_stream" "telemetry_delivery_stream" {
   s3_configuration {
     role_arn        = "${aws_iam_role.iot_role.arn}"
     bucket_arn      = "${aws_s3_bucket.telemetry_bucket.arn}"
-    buffer_size     = 5
+    buffer_size     = 10
     buffer_interval = 60
   }
 
