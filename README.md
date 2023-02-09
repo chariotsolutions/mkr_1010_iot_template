@@ -164,5 +164,5 @@ Do clean up your resources do the following:
    ```
    terraform destroy
 	```
-   This will tear down the infrascture you have created. 
+   This will tear down the infrastructure you have created. 
 
