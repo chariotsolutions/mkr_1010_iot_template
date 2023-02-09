@@ -19,7 +19,7 @@ The following AWS services will be used for this:
 
 ## Setup your Arduino development environment and generate a Certificate Signing Request for your device
 
-1. Follow the directions in [this](https://docs.arduino.cc/tutorials/mkr-wifi-1010/securely-connecting-an-arduino-mkr-wifi-1010-to-aws-iot-core) tutorial to configure the Arduino development environment. Follow the directions up to and including the point in the ***Configuring and Adding the Board to AWS IoT Core*** where it asks you to download the generated Certificate Signing Request. For the actual registration of the device in AWS IoT Core, follow the directions outlined in ***Register the device using Terraform*** in a later section of this document. 
+1. Follow the directions in [this](https://docs.arduino.cc/tutorials/mkr-wifi-1010/securely-connecting-an-arduino-mkr-wifi-1010-to-aws-iot-core) tutorial to configure the Arduino development environment. Follow the directions up to and including the point in the ***Configuring and Adding the Board to AWS IoT Core*** where it asks you to download the generated Certificate Signing Request. Rather than doing it manually through the Portal, I've included it in a Terraform script which will register the device in AWS IoT Core and configure the services. These directions are outlined later in the ***Register the device using Terraform*** section. 
 2. Once you have generated the signing request, copy the contents of the certificate signing request into a file named ***cert.csr*** and place it in the ***/mkr_1010_env/secret/*** directory. 
 
 ## Register the device using Terraform
@@ -164,5 +164,5 @@ Do clean up your resources do the following:
    ```
    terraform destroy
 	```
-
+   This will tear down the infrascture you have created. 
 
