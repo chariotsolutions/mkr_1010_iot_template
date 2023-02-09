@@ -36,7 +36,7 @@ MqttClient    mqttClient(sslClient);
 unsigned long lastMillis = 0;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   while (!Serial);
 
   if (!ECCX08.begin()) {
@@ -87,8 +87,6 @@ void publishTelemetry() {
     mqttClient.endMessage();
 }
 
-
-
 void loop() {
   if (WiFi.status() != WL_CONNECTED) {
     connectWiFi();
@@ -135,7 +133,7 @@ void connectMQTT() {
   while (!mqttClient.connect(broker, 8883)) {
     // failed, retrying
     Serial.print(" .");
-    delay(1000);
+    delay(3000);
   }
 
   Serial.println("\nYou're connected to the MQTT broker");
