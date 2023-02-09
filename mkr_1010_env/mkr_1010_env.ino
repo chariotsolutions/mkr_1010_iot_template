@@ -21,15 +21,13 @@
 #include <Arduino_MKRENV.h>
 #include "./secret/arduino_secrets.h"
 
-/////// Enter your sensitive data in arduino_secrets.h
-const char ssid[]        = SECRET_SSID;
-const char pass[]        = SECRET_PASS;
-const char broker[]      = SECRET_BROKER;
+// Enter your sensitive data in arduino_secrets.h
+const char ssid[]       = SECRET_SSID;
+const char pass[]       = SECRET_PASS;
+const char broker[]     = SECRET_BROKER;
 const char* certificate  = SECRET_CERTIFICATE;
 
-const String publish_topic = "environment/telemetry";
-const String subscribe_topic = "environment/incoming";
-
+const char* publish_topic = "environment/telemetry";
 
 WiFiClient    wifiClient;            // Used for the TCP socket connection
 BearSSLClient sslClient(wifiClient); // Used for SSL/TLS connection, integrates with ECC508
@@ -81,7 +79,9 @@ void publishTelemetry() {
 
     Serial.println(data); 
 
-    Serial.println("Sending message to queue " + publish_topic);
+    Serial.print("Sending message to queue ");
+    Serial.println(publish_topic);
+
     mqttClient.beginMessage(publish_topic);
     mqttClient.print(data);
     mqttClient.endMessage();
@@ -118,12 +118,11 @@ unsigned long getTime() {
 void connectWiFi() {
   Serial.print("Attempting to connect to SSID: ");
   Serial.print(ssid);
-  Serial.print(" ");
 
   while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
     // failed, retry
-    Serial.print(".");
-    delay(5000);
+    Serial.print(" .");
+    delay(3000);
   }
   Serial.println("\nYou're connected to the network\n");
   
@@ -132,17 +131,14 @@ void connectWiFi() {
 void connectMQTT() {
   Serial.print("Attempting to connect to MQTT broker: ");
   Serial.print(broker);
-  Serial.println();
 
   while (!mqttClient.connect(broker, 8883)) {
     // failed, retrying
-    Serial.print(".");
+    Serial.print(" .");
     delay(1000);
   }
 
   Serial.println("\nYou're connected to the MQTT broker");
 
-  // subscribe to a topic
-  mqttClient.subscribe(subscribe_topic);
 }
 
