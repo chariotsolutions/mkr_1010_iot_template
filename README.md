@@ -15,12 +15,12 @@ The following AWS services will be used for this:
 
 1. Attach the MKR 1010 ENV Shield on top of the the MKR 1010 WiFi. Make sure all of the pins align. It should only go on one way. 
 2. Connect the USB cable to the MKR WiFi to power it. 
-3. Download and install the drivers for the board. If you are using a Mac or Linux get the drivers from [here](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers). If you are on a Windows platform, download the drivers from [here](here).
+3. Download and install the drivers for the board. Directions for installing the drivers on multiple platforms can be found [here](https://support.arduino.cc/hc/en-us/articles/4411305694610-Install-or-update-FTDI-drivers).
 
 ## Setup your Arduino development environment and generate a Certificate Signing Request for your device
 
-1. Follow the directions in [this](https://docs.arduino.cc/tutorials/mkr-wifi-1010/securely-connecting-an-arduino-mkr-wifi-1010-to-aws-iot-core) tutorial to setup the Arduino development environment. Follow the directions up to and including the point in the ***Configuring and Adding the Board to AWS IoT Core*** where it asks you to download the generated Certificate Signning Request. For the actual registration of the device in AWS IoT Core, follow the directions outlined in ***Register the device using Terraform*** section below. 
-2. Copy the contents of the Certificate Signing Request into a file named ***cert.csr*** and place it in the ***/mkr_1010_env/secret/*** directory. 
+1. Follow the directions in [this](https://docs.arduino.cc/tutorials/mkr-wifi-1010/securely-connecting-an-arduino-mkr-wifi-1010-to-aws-iot-core) tutorial to configure the Arduino development environment. Follow the directions up to and including the point in the ***Configuring and Adding the Board to AWS IoT Core*** where it asks you to download the generated Certificate Signing Request. For the actual registration of the device in AWS IoT Core, follow the directions outlined in ***Register the device using Terraform*** in a later section of this document. 
+2. Once you have generated the signing request, copy the contents of the certificate signing request into a file named ***cert.csr*** and place it in the ***/mkr_1010_env/secret/*** directory. 
 
 ## Register the device using Terraform
 
@@ -40,7 +40,7 @@ The following AWS services will be used for this:
 	* AmazonKinesisFullAccess
 
 	**Note:** The above permissions allow full access. You should create custom policies for production environments.
-7. Follow the directions for [setting up Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build) on your machine. ***Note:** We will be using named profiles for this rather than environment variables so follow the directions for [configuring named profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiFrles.html) to configure a profiel.  
+7. Follow the directions for [setting up Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build) on your machine. ***Note:** We will be using named profiles for this rather than environment variables so follow the directions for [configuring named profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiFrles.html) to configure a profile.  
 8. Edit the main.tf located in the ***/Terraform*** directory. 
 	* Change the region in the ***provider** section to the region you wish to use
 	* Change the profile in the ***provider** section to the profile you created in step 1 above.
