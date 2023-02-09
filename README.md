@@ -17,12 +17,10 @@ The following AWS services will be used for this:
 2. Connect the USB cable to the MKR WiFi to power it. 
 3. Download and install the drivers for the board. If you are using a Mac or Linux get the drivers from [here](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers). If you are on a Windows platform, download the drivers from [here](here).
 
-		
 ## Setup your Arduino development environment and generate a Certificate Signing Request for your device
 
 1. Follow the directions in [this](https://docs.arduino.cc/tutorials/mkr-wifi-1010/securely-connecting-an-arduino-mkr-wifi-1010-to-aws-iot-core) tutorial to setup the Arduino development environment. Follow the directions up to and including the point in the ***Configuring and Adding the Board to AWS IoT Core*** where it asks you to download the generated Certificate Signning Request. For the actual registration of the device in AWS IoT Core, follow the directions outlined in ***Register the device using Terraform*** section below. 
-* Copy the contents of the Certificate Signing Request into a file named ***cert.csr*** and place it in the ***/mkr_1010_env/secret/*** directory. 
-	
+2. Copy the contents of the Certificate Signing Request into a file named ***cert.csr*** and place it in the ***/mkr_1010_env/secret/*** directory. 
 
 ## Register the device using Terraform
 
