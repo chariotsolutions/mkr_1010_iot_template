@@ -20,6 +20,7 @@
 #include <WiFiNINA.h> // change to #include <WiFi101.h> for MKR1000
 #include <Arduino_MKRENV.h>
 #include "./secret/arduino_secrets.h"
+#include <Arduino_JSON.h>
 
 // Enter your sensitive data in arduino_secrets.h
 const char ssid[]       = SECRET_SSID;
@@ -68,23 +69,22 @@ void publishTelemetry() {
   float pressure    = ENV.readPressure(MILLIBAR);        // Pressure in Millibars
   float illuminance = ENV.readIlluminance();             // lux
 
-  // Manually build JSON string
-  String data =
-    "{\n"
-    "  \"temperature\": " + String(temperature, 1) + ",\n"
-    "  \"humidity\": "    + String(humidity, 3)    + ",\n"
-    "  \"pressure\": "    + String(pressure, 3)    + ",\n"
-    "  \"illuminance\": " + String(illuminance, 3) + "\n"
-    "}";
+  JSONVar payload;
 
-    Serial.println(data); 
+  payload["humidity"] = humidity;
+  payload["temperature"] = temperature;
+  payload["pressure"] = pressure;
+  payload["illuminance"] = illuminance;
 
-    Serial.print("Sending message to queue ");
-    Serial.println(publish_topic);
+  String data = JSON.stringify(payload) + "\n";
 
-    mqttClient.beginMessage(publish_topic);
-    mqttClient.print(data);
-    mqttClient.endMessage();
+  Serial.println(data);
+  Serial.print("Sending message to queue ");
+  Serial.println(publish_topic);
+
+  mqttClient.beginMessage(publish_topic);
+  mqttClient.print(data);
+  mqttClient.endMessage();
 }
 
 void loop() {
