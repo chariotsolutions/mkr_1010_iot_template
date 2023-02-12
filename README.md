@@ -166,3 +166,13 @@ Do clean up your resources do the following:
 	```
    This will tear down the infrastructure you have created. 
 
+## Disclaimer and notes
+
+* The software is provided "as is" without any warranty or guarantee of any kind.
+* The user assumes all risks and responsibilities for the use of the software.
+* The developer or provider of the software is not liable for any damages, including direct, indirect, incidental, or consequential damages, arising from the use or inability to use the software.
+* The user acknowledges that the software may have defects or errors and agrees to use it at their own risk.
+* The developer or provider of the software may update or modify the software at any time without notice.
+* The user agrees to indemnify and hold the developer or provider of the software harmless from any claims, damages, or losses arising from the use of the software.
+* This software is not production ready
+* If you would like to make changes to the README directions, feel free to submit the changes. 
