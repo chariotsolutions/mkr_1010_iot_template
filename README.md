@@ -40,7 +40,7 @@ The following AWS services will be used for this:
 	* AmazonKinesisFullAccess
 
 	**Note:** The above permissions allow full access. You should create custom policies for production environments.
-7. Follow the directions for [setting up Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build) on your machine. ***Note:** We will be using named profiles for this rather than environment variables so follow the directions for [configuring named profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiFrles.html) to configure a profile.  
+7. Follow the directions for [setting up Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build) on your machine. ***Note:*** We will be using named profiles for this rather than environment variables so follow the directions for [configuring named profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiFrles.html) to configure a profile.  
 8. Edit the main.tf located in the ***/Terraform*** directory. 
 	* Change the region in the ***provider** section to the region you wish to use
 	* Change the profile in the ***provider** section to the profile you created in step 1 above.
