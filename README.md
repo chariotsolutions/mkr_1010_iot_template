@@ -20,6 +20,11 @@ The following AWS services will be used for this:
 ## Setup your Arduino development environment and generate a Certificate Signing Request for your device
 
 1. Follow the directions in [this](https://docs.arduino.cc/tutorials/mkr-wifi-1010/securely-connecting-an-arduino-mkr-wifi-1010-to-aws-iot-core) tutorial to configure the Arduino development environment. Follow the directions up to and including the point in the ***Configuring and Adding the Board to AWS IoT Core*** where it asks you to download the generated Certificate Signing Request. Rather than doing it manually through the Portal, I've included it in a Terraform script which will register the device in AWS IoT Core and configure the services. These directions are outlined later in the ***Register the device using Terraform*** section. 
+
+	**Note:**  In addition the the directions from that setup to install the required libraries, also install the following libraries:
+	* Arduino_MKRENV (by Arduino)
+	* Arduino-Json (by Arduino)
+
 2. Once you have generated the signing request, copy the contents of the certificate signing request into a file named ***cert.csr*** and place it in the ***/mkr_1010_env/secret/*** directory. 
 
 ## Register the device using Terraform
@@ -54,8 +59,8 @@ The following AWS services will be used for this:
 9. Download the generated certificate by doing the following:
 	1. Navigate to ***AWS IoT / Manage / Things*** and select the thing named ***MKR_1010_ENV_THING*** This will bring you to the ***Thing Details*** form.
 	2. Select the ***Certificates*** tab and click on the link for the ***Certificate ID***.
-	3. This will bring you to the ***Details*** form. 
-	4. Click on the butten labelled ***Actions*** in the upper right-hand corner and select ***Download***. Rename the file to ***certificate.pem.crt and move the file to the ***/mkr_1010_env/secret*** directory. You will later add the conntents of this to the ***arduino_secrets.h*** file. 
+	3. This will bring you to the ***Details*** form. Verify that the ***Status** is set to ***Active***. If it is not, select the ***Actions*** dropdown in the upper right hand corner and then select ***Activate***. 
+	4. Click on the butten labelled ***Actions*** in the upper right-hand corner and select ***Download***. Rename the file to ***certificate.pem.crt and move the file to the ***/mkr_1010_env/secret*** directory. You will later add the contents of this to the ***arduino_secrets.h*** file. 
 
 ## Configure your Arduino Secrets
 This file contains secret values and is included when compiling the Arduino firmware. Since it contains values that should not be exposed, it is not included in this project and therefore must be created. 
@@ -78,7 +83,7 @@ This file contains secret values and is included when compiling the Arduino firm
 	Your AWS IoT broker can be found by navigating to	***AWS IoT/MQTT***. This will bring you to the broker details form. From here you can copy the value displayed under ***Endpoint*** and paste it in as the value for ***SECRET_BROKER***.
 	
  
-4. Add the following line to the ***arduino_secrets.h** file to desitnate the certificate:
+4. Add the following line to the ***arduino_secrets.h** file to designate the certificate:
 	
 	```
 	const char SECRET_CERTIFICATE[] = R"(
