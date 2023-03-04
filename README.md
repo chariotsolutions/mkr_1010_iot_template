@@ -57,10 +57,15 @@ The following AWS services will be used for this:
 	This will generate an IoT Core device and a certificate that can be used to connect to the MQTT broker. 
 	
 9. Download the generated certificate by doing the following:
-	1. Navigate to ***AWS IoT / Manage / Things*** and select the thing named ***MKR_1010_ENV_THING*** This will bring you to the ***Thing Details*** form.
+	1. Navigate to ***AWS IoT / Manage / All Devices / Things*** and select the thing named ***MKR_1010_ENV_THING*** This will bring you to the ***Thing Details*** form.
 	2. Select the ***Certificates*** tab and click on the link for the ***Certificate ID***.
 	3. This will bring you to the ***Details*** form. Verify that the ***Status** is set to ***Active***. If it is not, select the ***Actions*** dropdown in the upper right hand corner and then select ***Activate***. 
-	4. Click on the butten labelled ***Actions*** in the upper right-hand corner and select ***Download***. Rename the file to ***certificate.pem.crt and move the file to the ***/mkr_1010_env/secret*** directory. You will later add the contents of this to the ***arduino_secrets.h*** file. 
+	4. Click on the butten labeled ***Actions*** in the upper right-hand corner and select ***Download***. Rename the file to ***certificate.pem.crt and move the file to the ***/mkr_1010_env/secret*** directory. You will later add the contents of this to the ***arduino_secrets.h*** file. 
+	5. Verify that there is a policy named ***mkr_1010_template_mkr_1010_policy*** in the list of policies at the bottom of the page. 
+	6. Click on that policy link. this will bring you the ***Policies Detail Page***.
+	7. Verify that the value in ***Policy Action*** is ***iot:\****. Keep in mind that this is a very open policy and should be more limited in a production environment. 
+	8. You should see a version number ***1*** under ***All Versions***.
+	 
 
 ## Configure your Arduino Secrets
 This file contains secret values and is included when compiling the Arduino firmware. Since it contains values that should not be exposed, it is not included in this project and therefore must be created. 
@@ -157,6 +162,14 @@ You should be able to verify that the data is entering the stream by
 4. Click on one of the items at the bottom level.    
 4. Click on the ***Download*** button. 
 5. Once the file is downloaded, open it in a text editor. The download file should contain the data that was persisted.
+
+## Debugging and Troubleshooting
+Use the serial monitor as documented [here](https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-monitor) to debug the firmware running on the MKR_1010 itself. The baud rage should be set to ***9600***. The output will let you know if you were able to  connect first to the WiFi then to the cloud. 
+
+* If your IDE does not see the port that the MKR_1010 is connnected to, make sure you've installed the [FTDI drivers](https://ftdichip.com/drivers/vcp-drivers/).
+* If you are getting an authorization error in the AWS Cloudwatch logs, check that the status of the certificate is Active in AWS. I've updated the README for this. 
+* If you are getting an authorization error in the AWS Cloudwatch logs, Check that the value you have in your arduino_secrets.h is the contents of the certificate.pem.crt file and not the contents of the .csr file.
+
 
 
 ## Cleaning up
