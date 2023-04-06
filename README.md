@@ -122,7 +122,7 @@ This file contains secret values and is included when compiling the Arduino firm
 2. Open the file named ***mkr_1010_env.ino*** in the ***mkr_1010_env*** directory.
 3. The port and device should already have been configured in the steps above to set up the IDE. Double check it by selecting ***Tools / Port*** from the menu. 
 4. From the menu select ***Sketch / Upload**. This step will perform a compile and subseqent upload to the device. 
-4. Open up the ***Serial Monitor** by selecting ***Tools / Serial Monitor*** from the menu. 
+4. Open up the ***Serial Monitor*** by selecting ***Tools / Serial Monitor*** from the menu. 
 5. On the right hand side 	of the serial monitor pane, make sure it is configured for ***Both NL & CR*** and ***9600 baud***. You should now begin to see status messages when the device attempts a connection and when it posts the telemetry. The telemetry message will look similar to the following in the serial monitor:
 
 	```
