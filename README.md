@@ -1,4 +1,4 @@
-# IoT Connectivity Bootstrap
+# AWS IoT Connectivity Bootstrap
 
 The purpose of this project is to provide a simple way of getting started quickly with connecting a MKR 1010 WIFI device with the Environment Shield to Amazon's IoT Core service, read environmental telemetry from the device and persist the data into an S3 bucket.
 The following AWS services will be used for this:
